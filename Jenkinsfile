@@ -1,29 +1,31 @@
 pipeline {
-    agent {
-        docker {
-            image 'python:3.11'
-            args '-u root'
-        }
-    }
+    agent any
 
     stages {
         stage('Checkout Code') {
             steps {
-                echo '📥 Pulling code from GitHub...'
+                echo '📥 Cloning repo...'
                 checkout scm
             }
         }
 
-        stage('Run Script') {
+        stage('Build Docker Image') {
             steps {
-                echo '🚀 Running Python script...'
-                sh 'python app.py'
+                echo '🐳 Building Docker image...'
+                sh 'docker build -t my-python-app .'
             }
         }
 
-        stage('Success') {
+        stage('Run Container') {
             steps {
-                echo '🎉 Pipeline ran successfully!'
+                echo '🚀 Running container...'
+                sh 'docker run --rm my-python-app'
+            }
+        }
+
+        stage('Done') {
+            steps {
+                echo '🎉 Dockerized pipeline ran successfully!'
             }
         }
     }
