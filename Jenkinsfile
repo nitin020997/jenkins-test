@@ -1,5 +1,10 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'python:3.11'
+            args '-u root'
+        }
+    }
 
     stages {
         stage('Checkout Code') {
@@ -12,7 +17,7 @@ pipeline {
         stage('Run Script') {
             steps {
                 echo '🚀 Running Python script...'
-                sh 'python3 app.py'
+                sh 'python app.py'
             }
         }
 
